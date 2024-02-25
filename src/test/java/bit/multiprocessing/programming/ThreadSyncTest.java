@@ -10,7 +10,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.RepeatedTest;
 
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
@@ -48,6 +51,7 @@ public class ThreadSyncTest {
 
     /**
      * Тест на синхронизацию через фазер.
+     * Геп может возникнуть если первый поток зайдет и уснет, а второй зайдет, кинет notify и продолжит выполнение
      */
     @RepeatedTest(value = COUNT)
     public void phaserSyncTest() throws InterruptedException {
@@ -74,8 +78,7 @@ public class ThreadSyncTest {
      */
     @RepeatedTest(value = COUNT)
     public void phaserWithCommandSyncTest() throws InterruptedException {
-
-        Phaser phaser = new Phaser(3);
+        Phaser phaser = new Phaser(3);// 2 воркера + 1 main для синхронизации
         Task task1 = new Task();
         Task task2 = new Task();
 
@@ -86,7 +89,7 @@ public class ThreadSyncTest {
         t2.start();
 
         Thread.sleep(10);
-
+        //ждем пока воркеры заснут и будим их
         phaser.arriveAndAwaitAdvance(); // ждем пока у начала 1й фазы
         phaser.arriveAndAwaitAdvance(); // ждем пока у начала 2й фазы (све потоки закончат выполнение)
         phaser.arriveAndDeregister(); // завершаем выполнение текущего потока у 3й фазы
@@ -146,7 +149,7 @@ public class ThreadSyncTest {
      */
     @RepeatedTest(value = COUNT)
     public void countDownByCommandSyncTest() throws InterruptedException {
-        CountDownLatch countDownLatch = new CountDownLatch(3);
+        CountDownLatch countDownLatch = new CountDownLatch(3);// 2 воркера + 1 main для синхронизации
 
         Task task1 = new Task();
         Task task2 = new Task();
@@ -158,6 +161,7 @@ public class ThreadSyncTest {
         t2.start();
 
         Thread.sleep(100);
+        //ждем пока воркеры заснут и будим их
         countDownLatch.countDown();
 
         t1.join();
@@ -195,7 +199,7 @@ public class ThreadSyncTest {
      */
     @RepeatedTest(value = COUNT)
     public void cyclicBarrierByCommandSyncTest() throws InterruptedException, BrokenBarrierException {
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(3);
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(3);// 2 воркера + 1 main для синхронизации
 
         Task task1 = new Task();
         Task task2 = new Task();
@@ -205,7 +209,7 @@ public class ThreadSyncTest {
 
         t1.start();
         t2.start();
-
+        //ждем пока воркеры заснут и будим их
         Thread.sleep(100);
         cyclicBarrier.await();
 
