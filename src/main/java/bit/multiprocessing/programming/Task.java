@@ -9,12 +9,12 @@ import java.time.Instant;
 public class Task implements Runnable {
 
     @Getter
-    private Instant time;
+    private long time;
 
 
     @Override
     public void run() {
-        time = Instant.now();
+        time = System.nanoTime();
         log.debug("task was run from thread {}", Thread.currentThread().getName());
     }
 }

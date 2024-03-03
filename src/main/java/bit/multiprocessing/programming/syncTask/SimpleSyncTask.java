@@ -12,7 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 public class SimpleSyncTask implements Runnable{
 
     public static class SyncSource{
-        private final boolean[] arr = new boolean[]{true, true};
+        public volatile boolean val0 = true;
+        public volatile boolean val1 = true;
     }
 
     private final Runnable delegate;
@@ -25,11 +26,18 @@ public class SimpleSyncTask implements Runnable{
      */
     @Override
     public void run() {
-        int me = TwoThreadUtils.getNumber();
         int other = TwoThreadUtils.other();
-        syncSource.arr[other] = false;
-        while (syncSource.arr[me]){
-            Thread.onSpinWait();
+        if (other == 0) {
+            syncSource.val0 = false;
+            while (syncSource.val1){
+                Thread.onSpinWait();
+            }
+        }
+        else {
+            syncSource.val1 = false;
+            while (syncSource.val0){
+                Thread.onSpinWait();
+            }
         }
         delegate.run();
     }
