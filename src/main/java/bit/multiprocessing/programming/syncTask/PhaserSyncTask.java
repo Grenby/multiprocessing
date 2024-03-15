@@ -12,6 +12,7 @@ import java.util.concurrent.Phaser;
  *  <a href="https://habr.com/ru/articles/277669/">...</a>
  * Статья с гифками про все синхронизаторы
  *
+ * Из минусов - относительно сложен в применении, но дает большую гибкость с многофазовой синхронизацией
  */
 @Slf4j
 @RequiredArgsConstructor
