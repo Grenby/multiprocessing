@@ -1,15 +1,13 @@
 package bit.multiprocessing.programming.locks;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 public class SimpleReadWriteLock {
 
     private final Object sync = new Object();
-    @Getter
+
     private final WriteLock writeLock;
-    @Getter
     private final ReadLock readLock;
 
     public SimpleReadWriteLock() {
@@ -20,6 +18,14 @@ public class SimpleReadWriteLock {
             writeLock.read = readLock;
             readLock.readLock = writeLock;
         }
+    }
+
+    public SimpleLock readLock(){
+        return readLock;
+    }
+
+    public SimpleLock writeLock(){
+        return writeLock;
     }
 
     @RequiredArgsConstructor
@@ -59,8 +65,9 @@ public class SimpleReadWriteLock {
         ReadLock read;
         boolean locked = false;
 
+        @SneakyThrows
         @Override
-        public void lock() throws InterruptedException {
+        public void lock() {
             synchronized (sync) {
                 while (read.locked != 0 || locked) {
                     sync.wait();
