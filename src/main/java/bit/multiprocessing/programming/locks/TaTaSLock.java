@@ -2,7 +2,7 @@ package bit.multiprocessing.programming.locks;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class TaTaSLock implements SimpleReadWriteLock {
+public class TaTaSLock implements SimpleLock {
 
     private final AtomicBoolean lock = new AtomicBoolean(false);
 

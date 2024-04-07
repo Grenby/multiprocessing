@@ -1,8 +1,6 @@
 package bit.multiprocessing.programming.locks;
 
-import java.util.concurrent.locks.ReadWriteLock;
-
-public class SyncSimpleReadWriteLock implements SimpleReadWriteLock{
+public class SyncSimpleLock implements SimpleLock {
 
 
     @Override

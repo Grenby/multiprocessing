@@ -1,6 +1,6 @@
 package bit.multiprocessing.programming.locks;
 
-public interface SimpleReadWriteLock {
+public interface SimpleLock {
 
     void lock();
 
