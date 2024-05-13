@@ -30,7 +30,6 @@ public abstract class ThreadNode extends Thread{
     public void run(){
         long numMessages = 0;
         long start = System.nanoTime();
-
             while (isActive) {
                 Message message = doGet();
                 numMessages++;
@@ -44,8 +43,8 @@ public abstract class ThreadNode extends Thread{
             this.numMessages = numMessages;
     }
 
-    protected abstract void doSend(Message message);
+    public abstract void doSend(Message message);
 
-    protected abstract Message doGet();
+    public abstract Message doGet();
 
 }

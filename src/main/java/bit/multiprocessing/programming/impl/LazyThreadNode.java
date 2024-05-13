@@ -16,7 +16,7 @@ public class LazyThreadNode extends ThreadNode {
 
 
     @Override
-    protected void doSend(Message message) {
+    public void doSend(Message message) {
         synchronized (messages){
             messages.add(message);
             messages.notifyAll();
@@ -25,7 +25,7 @@ public class LazyThreadNode extends ThreadNode {
 
     @SneakyThrows
     @Override
-    protected Message doGet() {
+    public Message doGet() {
         Message message;
         synchronized (messages){
         while (messages.isEmpty()) {
@@ -35,4 +35,17 @@ public class LazyThreadNode extends ThreadNode {
         }
         return message;
     }
+
+    @SneakyThrows
+    public Message doGetPeek() {
+        Message message;
+        synchronized (messages){
+            while (messages.isEmpty()) {
+                messages.wait();
+            }
+            message = messages.peek();
+        }
+        return message;
+    }
+
 }
