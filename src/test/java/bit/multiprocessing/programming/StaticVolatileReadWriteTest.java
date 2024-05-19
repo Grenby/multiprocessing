@@ -34,8 +34,8 @@ public class StaticVolatileReadWriteTest {
     private int tokens = 0;
 
     @Benchmark
-    @Group("TestClass")
-    @GroupThreads(4)
+    @Group("TestClassRead")
+    @GroupThreads(2)
     public boolean read(final TestClass testClass) {
         Blackhole.consumeCPU(tokens);
         return testClass.isActive();
@@ -43,12 +43,11 @@ public class StaticVolatileReadWriteTest {
 
 
     @Benchmark
-    @Group("TestClass")
-    @GroupThreads(4)
+    @Group("TestClassWrite")
+    @GroupThreads(2)
     public void write(final TestClass testClass) {
         Blackhole.consumeCPU(tokens);
         testClass.setActive(false);
     }
-
 
 }

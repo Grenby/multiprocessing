@@ -30,8 +30,10 @@ public class Start {
 
         Thread.sleep(10000);
 
+        for (ThreadNode node:nodes){
+            node.setActive(false);
+        }
 
-        ThreadNode.isActive = false;
         Thread.sleep(1000);
 
 

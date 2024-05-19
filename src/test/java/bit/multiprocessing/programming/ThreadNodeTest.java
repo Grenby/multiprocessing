@@ -27,7 +27,6 @@ class ThreadNodeTest {
 
     @BeforeEach
     public void init(){
-        ThreadNode.isActive = true;
         nodes = new ArrayList<>();
     }
 
@@ -77,10 +76,14 @@ class ThreadNodeTest {
             nodes.get(i).start();
         }
 
-        Thread.sleep(30000);
+        Thread.sleep(20000);
 
 
-        ThreadNode.isActive = false;
+
+
+        for (ThreadNode node:nodes){
+            node.setActive(false);
+        }
         Thread.sleep(1000);
 
 
@@ -97,7 +100,7 @@ class ThreadNodeTest {
         double max = arr.stream().max(Comparator.comparingDouble(o -> o)).orElse(-1.);
         double min = arr.stream().min(Comparator.comparingDouble(o -> o)).orElse(-1.);
         err = Math.sqrt(err);
-        System.out.println(name + " " +String.format("%.3f",mean) +"+-" + String.format("%.3f",err) +" операций в милисекунду (max: " + String.format("%.3f", max)  +" min: " + String.format("%.3f",min) + ")");
+        System.out.println(name + " " +String.format("%.3f",mean) +"+-" + String.format("%.3f",err) +" операций в миллисекунду (max: " + String.format("%.3f", max)  +" min: " + String.format("%.3f",min) + ")");
     }
 
 }

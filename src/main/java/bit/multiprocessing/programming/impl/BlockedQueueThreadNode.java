@@ -5,7 +5,6 @@ import bit.multiprocessing.programming.ThreadNode;
 import lombok.SneakyThrows;
 
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Используем очередь основанную на Lock
