@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class ThreadNode extends Thread{
+public abstract class ThreadNode extends Thread implements TokenRingNode{
 
     public static volatile boolean isActive = true;
 
@@ -22,6 +22,7 @@ public abstract class ThreadNode extends Thread{
         this.setName(Integer.toString(number));
     }
 
+    @Override
     public void sendMessage(Message message){
         doSend(message);
     }
@@ -43,8 +44,8 @@ public abstract class ThreadNode extends Thread{
             this.numMessages = numMessages;
     }
 
-    public abstract void doSend(Message message);
+    protected abstract void doSend(Message message);
 
-    public abstract Message doGet();
+    protected abstract Message doGet();
 
 }

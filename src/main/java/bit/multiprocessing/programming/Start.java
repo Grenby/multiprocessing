@@ -1,6 +1,6 @@
 package bit.multiprocessing.programming;
 
-import bit.multiprocessing.programming.impl.LazyThreadNode;
+import bit.multiprocessing.programming.impl.LazySyncThreadNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ public class Start {
         List<ThreadNode> nodes = new ArrayList<>();
 
         for (int i=0;i<n;i++){
-            ThreadNode node = new LazyThreadNode(i);
+            ThreadNode node = new LazySyncThreadNode(i);
             for (int j=0;j<500;j++){
                 int finalJ = j;
                 int finalI = i;

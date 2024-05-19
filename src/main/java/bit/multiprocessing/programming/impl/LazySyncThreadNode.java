@@ -6,11 +6,15 @@ import lombok.SneakyThrows;
 
 import java.util.LinkedList;
 
-public class LazyThreadNode extends ThreadNode {
+
+/**
+ * Наивный способ реализации черещ синхронизацию
+ */
+public class LazySyncThreadNode extends ThreadNode {
 
     private final LinkedList<Message> messages = new LinkedList<>();
 
-    public LazyThreadNode(int number) {
+    public LazySyncThreadNode(int number) {
         super(number);
     }
 
@@ -32,18 +36,6 @@ public class LazyThreadNode extends ThreadNode {
             messages.wait();
         }
         message = messages.poll();
-        }
-        return message;
-    }
-
-    @SneakyThrows
-    public Message doGetPeek() {
-        Message message;
-        synchronized (messages){
-            while (messages.isEmpty()) {
-                messages.wait();
-            }
-            message = messages.peek();
         }
         return message;
     }

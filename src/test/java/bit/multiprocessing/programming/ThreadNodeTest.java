@@ -1,41 +1,73 @@
 package bit.multiprocessing.programming;
 
-import bit.multiprocessing.programming.impl.LazyThreadNode;
+import bit.multiprocessing.programming.impl.BlockedQueueThreadNode;
+import bit.multiprocessing.programming.impl.ConcurrentThreadNode;
+import bit.multiprocessing.programming.impl.LazySyncThreadNode;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Тест на пропускную способность кольца
+ * Изначально создается кольцо из N нод с M сообщениями в каждой, за
+ *
+ */
 class ThreadNodeTest {
 
-    private final  int N = 6;
-    private final int M = 1000;
+    private final  int N = 2;
+    private final int M = 10000;
 
-    List<ThreadNode> nodes = new ArrayList<>();
+    List<ThreadNode> nodes;;
     String name = "";
+
+    @BeforeEach
+    public void init(){
+        ThreadNode.isActive = true;
+        nodes = new ArrayList<>();
+    }
+
     @Test
     public void lazyTest(){
         name = "lazyTest";
         for (int i=0;i<N;i++){
-            nodes.add(new LazyThreadNode(i));
+            nodes.add(new LazySyncThreadNode(i));
         }
     }
 
 
+    @Test
+    public void blockedQueue(){
+        name = "blockedQueue";
+        for (int i=0;i<N;i++){
+            nodes.add(new BlockedQueueThreadNode(i));
+        }
+    }
+
+    @Test
+    public void concurrentQueue(){
+        name = "concurrentQueue";
+        for (int i=0;i<N;i++){
+            nodes.add(new ConcurrentThreadNode(i));
+        }
+    }
+
     @SneakyThrows
     @AfterEach
     public void test(){
-
+        Thread.sleep(5000);
         List<ThreadNode> nodes = this.nodes;
 
         for (int i=0;i<N;i++){
 
-            for (int j=0;j<500;j++){
+            for (int j=0;j<M;j++){
                 int finalJ = j;
                 int finalI = i;
-                nodes.get(i).sendMessage(()-> (finalI *M + finalJ) );
+                nodes.get(i).sendMessage(()-> (finalI * M + finalJ));
             }
         }
 
@@ -45,7 +77,7 @@ class ThreadNodeTest {
             nodes.get(i).start();
         }
 
-        Thread.sleep(10000);
+        Thread.sleep(30000);
 
 
         ThreadNode.isActive = false;
@@ -62,8 +94,10 @@ class ThreadNodeTest {
 
         double mean = arr.stream().reduce(0.0, Double::sum)/arr.size();
         double err = arr.stream().map(a -> (a-mean) * (a-mean)).reduce(0.0, Double::sum)/(arr.size()-1);
+        double max = arr.stream().max(Comparator.comparingDouble(o -> o)).orElse(-1.);
+        double min = arr.stream().min(Comparator.comparingDouble(o -> o)).orElse(-1.);
         err = Math.sqrt(err);
-        System.out.println(name + " " + mean +"+-" + err +" операций в милисекунду");
+        System.out.println(name + " " +String.format("%.3f",mean) +"+-" + String.format("%.3f",err) +" операций в милисекунду (max: " + String.format("%.3f", max)  +" min: " + String.format("%.3f",min) + ")");
     }
 
 }
