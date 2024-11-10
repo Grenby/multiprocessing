@@ -15,3 +15,4 @@ QuickSortBenchMark.shuffle                 avgt   20  10144.268 ± 310.745  ms/o
 2) скорость многопоточной реализации 3 секунды на сортировку 10^8 элементов
 
 Следовательно ускорение примерно 3.6 раз.
+Бенчмарк src/test/java/bit/multiprocessing/programming/QuickSortBenchMark.java
