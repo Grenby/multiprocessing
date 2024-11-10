@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class QuicksortSeqTest {
 
-    private final Quicksort quicksort = new QuicksortSeq();
+    private final QuicksortSeq quicksort = new QuicksortSeq();
 
     public static Stream<Arguments> testArrays() {
         return Stream.of(
